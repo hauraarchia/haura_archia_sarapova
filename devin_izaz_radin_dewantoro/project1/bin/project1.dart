@@ -65,4 +65,8 @@ void main(List<String> arguments) {
   } finally {
     print("Execution complete.");
   }
+
+  // Null Safety
+  String ? kendaraan;
+  stdout.write("Kendaraan $kendaraan");
 }
