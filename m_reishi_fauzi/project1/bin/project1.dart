@@ -34,4 +34,44 @@ void main(List<String> arguments) {
   }
   */
   stdout.writeln("alamat saya $alamat");
+
+  //NUMBER VARIABEL
+  num nilai = 85.5;
+  stdout.writeln("nilai saya $nilai");
+  dynamic bebas = 100;
+  stdout.writeln("nilai dari dynamic adalah $bebas");
+  String angka1 = "15";
+  int angka2=int.parse(angka1);
+  int angka3 = bebas;
+
+  //LIST
+  List <String> hobby = ['mancing', 'tidur', 'berenang'];
+  hobby.add('ngokang');
+  stdout.writeln('hobby saya $hobby');
+
+  //MAP
+  Map<String,String> data = {
+    "nama" : "dian",
+    "alamat" : "bekasi",
+    "jenis_kelamin" : "perempuan"
+  };
+  data['pekerjaan'] = 'dosen';
+  stdout.writeln("data : $data");
+  stdout.writeln("nama yang ada di data ${data['nama']}");
+
+  //EXCEPTION TRY
+    try {
+    // Code that might throw an exception
+    int result = 10 ~/ 0; // This will throw an IntegerDivisionByZeroException
+  } on IntegerDivisionByZeroException {
+    // Handles the specific IntegerDivisionByZeroException
+    print("Cannot divide by zero!");
+  } catch (e) {
+    // Handles any other type of exception and provides the exception object
+    print("An unexpected error occurred: $e");
+  } finally {
+    // Code that always executes, regardless of whether an exception occurred
+    print("Execution complete.");
+  }
+
 }
