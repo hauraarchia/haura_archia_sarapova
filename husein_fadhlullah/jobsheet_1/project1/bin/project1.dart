@@ -28,5 +28,37 @@ void main(List<String> arguments) {
     stdout.writeln("Jenis kelamin saya Perempuan");
   }
   stdout.writeln("Alamat saya $alamat");
+  num nilai = 90.5; //bisa int atau double
+  stdout.writeln("Nilai saya $nilai");
+  dynamic bebas = "true";
+  stdout.writeln("Nilai dari dynamic adalah $bebas");
+  // String angka1 = "15";
+  // int angka2 = int.parse(angka1);
+  // int angka3 = bebas;
+  //list
+  List<String> hobby = ['Membaca', 'Menulis', 'Coding'];
+  hobby.add("Shopping");
+  stdout.writeln("Hobby saya: $hobby");
 
+  Map<String,String> data = {
+  "nama": "Dia",
+  "alamat": "Jl. Merdeka No. 1",
+  "jenisKelamin": "Perempuan",
+  "umur": "20"
+  };
+  data["pekerjaan"] = "Mahasiswa";
+  data.addAll({"hobi": "Membaca"});
+
+  stdout.writeln("Data : $data");
+  stdout.writeln("Nama yang ada di data ${data['nama']}");
+
+  try {
+    int result = 10 ~/ 0;
+  } on IntegerDivisionByZeroException {
+    print('Tidak bisa membagi dengan nol');
+  } catch (e) {
+    print('Terjadi kesalahan: $e');
+  } finally {
+    print('Eksekusi selesai');
+  }
 }
