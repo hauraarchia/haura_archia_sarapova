@@ -42,4 +42,12 @@ void main(List<String> arguments) {
   double b = 5.5;
   stdout.writeln("Penjumlahan: ${a + b}");
   stdout.writeln("Pembagian: ${a ~/ 3}");
+  // -----------------------
+  // 6. STRINGS
+  // -----------------------
+  String first = "Hello";
+  String second = "World";
+  stdout.writeln(first + " " + second);
+  stdout.writeln("Panjang teks: ${first.length}");
+  stdout.writeln("Huruf besar: ${second.toUpperCase()}");
 }
