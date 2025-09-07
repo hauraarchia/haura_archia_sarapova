@@ -11,9 +11,11 @@ void main(List<String> arguments) {
     multi line comment
     banyak line comment
   */
+
   // constanta dan final
   final String nama2 = "Andhika";
   print("Nama saya $nama $nama2");
+
   // variabel
   int umur = 20;
   double tinggi = 174.5;
@@ -39,10 +41,13 @@ void main(List<String> arguments) {
     int angka2 = int.parse(angka1);
     int angka3 = bebas;
   */
+
   // list
   List <String> hobby =["Makan", "Main Roblax", "Tidur"];
   hobby.add("Nonton");
   stdout.writeln("Hobby saya adalah $hobby");
+
+  // map
   Map <String, String> data = {
     "nama" : "Tenxi",
     "Alamat" : "Malang",
@@ -52,4 +57,20 @@ void main(List<String> arguments) {
   data.addAll({"hobi" : "Menyanyi"});
   stdout.writeln("Data : $data");
   stdout.writeln("Nama yang ada di data ${data['nama']}");
+
+  // try
+  // Try Catch
+  try {
+    // Code that may throw an error
+    int result = 10 ~/ 0; // This will throw an IntegerDivisionByZeroException
+  } on IntegerDivisionByZeroException {
+    // Handles the specific exception IntegerDivisionByZeroException
+    print('Error: Cannot divide by zero!');
+  } catch (e) {
+    // Handles any other type of exception and provides the exception object/message
+    print('An error occurred: $e');
+  } finally {
+    // Code that runs always executes, regardless of whether an exception occurred or not
+    print('Execution completed.');
+  }
 }
