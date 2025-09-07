@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:project1/project1.dart' as project1;
 
 const String nama = "Filla";
@@ -14,5 +15,32 @@ void main(List<String> arguments) {
   //CONSTANTA & FINAL
   final String nama2 = "Roblax";
   print("Nama saya $nama $nama2");
+
+
+  //VARIABEL
+    int umur = 20;
+  double tinggi = 170.5;
+  bool jenis_kelamin = true; // true = laki-laki, false = perempuan
+  String alamat = "Jl Karang Tengah RT/RW 06/01";
+  stdout.writeln("Umur saya $umur tahun");
+  stdout.writeln("Tinggi saya $tinggi cm");
+  stdout.writeln(
+    "Jenis kelamin saya ${jenis_kelamin ? "Laki-laki" : "Perempuan"}"
+  );
+  // if (jenis_kelamin == true) {
+  //   stdout.writeln("Jenis kelamin saya Laki-laki");
+  // } else {
+  //   stdout.writeln("Jenis kelamin saya Perempuan");
+  // }           
+  stdout.writeln("Alamat saya $alamat");
+  num nilai = 90.5; // bisa menampung int dan double
+  stdout.writeln("Nilai saya $nilai");
+  dynamic bebas = "17";
+  stdout.writeln("Nilai dari dynamic adalah $bebas");
+  /*
+    String angka1 = "15";
+    int angka2 = int.parse(angka1);
+    int angka3 = bebas;
+  */
 
 }
