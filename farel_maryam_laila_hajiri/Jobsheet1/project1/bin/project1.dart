@@ -68,4 +68,15 @@ void main(List<String> arguments) {
   stdout.writeln("Bagi: ${x / y}");
   stdout.writeln("Modulo: ${x % y}");
   stdout.writeln("Perbandingan: ${x > y}, ${x == y}");
+  // -----------------------
+  // 9. EXCEPTIONS
+  // -----------------------
+  try {
+    int hasil = 10 ~/ 0; // error: division by zero
+    stdout.writeln(hasil);
+  } catch (e) {
+    stdout.writeln("Terjadi error: $e");
+  } finally {
+    stdout.writeln("Bagian ini selalu jalan");
+  }
 }
