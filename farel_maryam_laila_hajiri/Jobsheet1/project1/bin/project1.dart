@@ -21,4 +21,18 @@ void main(List<String> arguments) {
   final currentYear = 2025; // runtime constant
   const pi = 3.14285;       // compile-time constant
   stdout.writeln("Tahun: $currentYear, Pi: $pi");
+  // -----------------------
+  // 4. DATA TYPES
+  // -----------------------
+  int age = 2;
+  double height = 165.5;
+  num weight = 48;
+  bool isStudent = true;
+  String greeting = "Halo, Dunia!";
+  List<String> hobbies = ["Coding", "Gaming", "Traveling"];
+  Map<String, String> capital = {"Indonesia": "Jakarta", "Japan": "Tokyo"};
+  dynamic anything = "Bisa berubah";
+  anything = 123;
+  stdout.writeln("Umur: $age, Tinggi: $height, Berat: $weight, Student: $isStudent");
+  stdout.writeln("Hobi: $hobbies, Ibu kota: $capital, Dynamic: $anything");
 }
