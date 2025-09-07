@@ -72,4 +72,8 @@ void main(List<String> arguments) {
     print('Execution completed.');
   }
 
+  // null safety
+  String? kendaraan;
+  stdout.writeln("Kendaraan $kendaraan");
+
 }
