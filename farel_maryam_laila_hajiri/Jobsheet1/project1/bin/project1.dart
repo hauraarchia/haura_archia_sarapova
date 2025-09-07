@@ -35,4 +35,11 @@ void main(List<String> arguments) {
   anything = 123;
   stdout.writeln("Umur: $age, Tinggi: $height, Berat: $weight, Student: $isStudent");
   stdout.writeln("Hobi: $hobbies, Ibu kota: $capital, Dynamic: $anything");
+  // -----------------------
+  // 5. NUMBERS
+  // -----------------------
+  int a = 12;
+  double b = 5.5;
+  stdout.writeln("Penjumlahan: ${a + b}");
+  stdout.writeln("Pembagian: ${a ~/ 3}");
 }
