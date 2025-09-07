@@ -50,4 +50,11 @@ void main(List<String> arguments) {
   stdout.writeln(first + " " + second);
   stdout.writeln("Panjang teks: ${first.length}");
   stdout.writeln("Huruf besar: ${second.toUpperCase()}");
+  // -----------------------
+  // 7. BOOLEANS
+  // -----------------------
+  bool isActive = false;
+  stdout.writeln("Negasi: ${!isActive}");
+  stdout.writeln("AND: ${isActive && isStudent}");
+  stdout.writeln("OR: ${isActive || isStudent}");
 }
