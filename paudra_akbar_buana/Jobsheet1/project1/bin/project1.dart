@@ -31,7 +31,7 @@ void main(List<String> arguments) {
   //   stdout.writeln("Jenis kelamin saya Perempuan");
   // }
   stdout.writeln("Alamat saya $alamat");
-  num nilai = 90.5; // bisa menampung int dan double
+  num nilai = 89.5; // bisa menampung int dan double
   stdout.writeln("Nilai saya $nilai");
   dynamic bebas = "16";
   stdout.writeln("Nilai dari dynamic adalah $bebas");
@@ -40,4 +40,21 @@ void main(List<String> arguments) {
       int angka2 = int.parse(angka1);
       int angka3 = bebas;
     */
+
+      // list
+  List <String> hobby =["Main bola", "Main Valorun", "Main Fifa"];
+  hobby.add("Nonton Netflix");
+  stdout.writeln("Hobby saya adalah $hobby");
+
+  // map
+  Map <String, String> data = {
+    "nama" : "Dryskie",
+    "Alamat" : "Kuala Lumpur",
+    "Jenis Kelamin" : "Laki-laki",
+  };
+  data["umur"] = "18";
+  data.addAll({"hobi" : "Memancing"});
+  stdout.writeln("Data : $data");
+  stdout.writeln("Nama yang ada di data ${data['nama']}");
+
 }
