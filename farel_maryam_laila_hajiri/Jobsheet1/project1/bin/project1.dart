@@ -79,4 +79,12 @@ void main(List<String> arguments) {
   } finally {
     stdout.writeln("Bagian ini selalu jalan");
   }
+    // -----------------------
+  // 10. FUNCTIONS
+  // -----------------------
+  int tambah(int a, int b) {
+    return a + b;
+  }
+
+  stdout.writeln("Fungsi tambah: ${tambah(5, 3)}");
 }
