@@ -57,4 +57,15 @@ void main(List<String> arguments) {
   stdout.writeln("Negasi: ${!isActive}");
   stdout.writeln("AND: ${isActive && isStudent}");
   stdout.writeln("OR: ${isActive || isStudent}");
+  // -----------------------
+  // 8. OPERATORS
+  // -----------------------
+  int x = 7;
+  int y = 3;
+  stdout.writeln("Tambah: ${x + y}");
+  stdout.writeln("Kurang: ${x - y}");
+  stdout.writeln("Kali: ${x * y}");
+  stdout.writeln("Bagi: ${x / y}");
+  stdout.writeln("Modulo: ${x % y}");
+  stdout.writeln("Perbandingan: ${x > y}, ${x == y}");
 }
