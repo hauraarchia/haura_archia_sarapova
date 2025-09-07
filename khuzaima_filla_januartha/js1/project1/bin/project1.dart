@@ -43,4 +43,20 @@ void main(List<String> arguments) {
     int angka3 = bebas;
   */
 
+  // LIST
+  List <String> hobby =["Roblox", "Roblox", "Roblox" , "Roblox", "Roblox", "Ngedit foto ayang"];
+  hobby.add("ROBLOX");
+  stdout.writeln("Hobby saya adalah $hobby");
+
+  // MAP
+  Map <String, String> data = {
+    "nama" : "Masputih",
+    "Alamat" : "Malang",
+    "Jenis Kelamin" : "Laki-laki",
+  };
+    data["umur"] = "17";
+  data.addAll({"hobi" : "R O B L O X"});
+  stdout.writeln("Data : $data");
+  stdout.writeln("Nama yang ada di data ${data['nama']}");
+
 }
