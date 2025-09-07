@@ -98,4 +98,16 @@ void main(List<String> arguments) {
 
   innerFunction();
   //stdout.writeln(localVar); // ERROR: localVar tidak bisa diakses di luar fungsi
+   // -----------------------
+  // 12. NULL SAFETY
+  // -----------------------
+  String? nullableString;
+  nullableString = null;
+  stdout.writeln("Nullable: $nullableString");
+
+  String nonNullable = "Teks";
+  stdout.writeln("Non-nullable: $nonNullable");
+
+  String? maybeName;
+  stdout.writeln("Default jika null: ${maybeName ?? "Guest"}");
 }
