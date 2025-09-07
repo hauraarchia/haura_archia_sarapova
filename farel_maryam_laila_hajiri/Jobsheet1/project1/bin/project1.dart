@@ -15,4 +15,10 @@ void main(List<String> arguments) {
   // -----------------------
   var name = "Farel Maryam Laila Hajiri";
   stdout.writeln("Nama: $name");
+  // -----------------------
+  // 3. CONSTANTS & FINAL
+  // -----------------------
+  final currentYear = 2025; // runtime constant
+  const pi = 3.14285;       // compile-time constant
+  stdout.writeln("Tahun: $currentYear, Pi: $pi");
 }
