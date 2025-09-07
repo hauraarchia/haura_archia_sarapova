@@ -73,4 +73,9 @@ void main(List<String> arguments) {
     // Code that runs always executes, regardless of whether an exception occurred or not
     print('Execution completed.');
   }
+
+  // NULL SAFETY
+  String? kendaraan;
+  stdout.writeln("Kendaraan $kendaraan");
+
 }
