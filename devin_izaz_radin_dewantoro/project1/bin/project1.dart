@@ -54,4 +54,15 @@ void main(List<String> arguments) {
 
   stdout.writeln("Data : $data");
   stdout.writeln("Nama yang ada di data ${data['nama']}");
+
+  // Try Catch
+  try {
+    int result = 10 ~/ 0;
+  } on IntegerDivisionByZeroException {
+    print("Cannot divide by zero!");
+  } catch (e) {
+    print("An unexpected error occurred: $e");
+  } finally {
+    print("Execution complete.");
+  }
 }
