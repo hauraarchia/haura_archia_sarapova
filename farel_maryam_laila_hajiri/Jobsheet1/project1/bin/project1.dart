@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:project1/project1.dart' as project1;
 
 void main(List<String> arguments) {
@@ -9,4 +10,9 @@ void main(List<String> arguments) {
   /* Ini adalah 
      multi-line comment */
   /// Ini adalah documentation comment (biasanya untuk docs otomatis)
+  // -----------------------
+  // 2. VARIABLES
+  // -----------------------
+  var name = "Farel Maryam Laila Hajiri";
+  stdout.writeln("Nama: $name");
 }
