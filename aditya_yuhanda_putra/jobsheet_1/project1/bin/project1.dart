@@ -68,13 +68,15 @@ void main(List<String> arguments) {
   } on IntegerDivisionByZeroException {
     // Handles the specific exception IntegerDivisionByZeroException
     print('Error: Cannot divide by zero!');
-  }
-  catch (e) {
+  } catch (e) {
     // Handles any other type of exception and provides the exception object/message
     print('An error occurred: $e');
   } finally {
     // Code that runs always executes, regardless of whether an exception occurred or not
     print('Execution completed.');
   }
-}
 
+  // Null Safety
+  String? kendaraan;
+  stdout.writeln("Kendaraan $kendaraan");
+}
