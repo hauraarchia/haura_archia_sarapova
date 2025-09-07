@@ -58,7 +58,6 @@ void main(List<String> arguments) {
   stdout.writeln("Data : $data");
   stdout.writeln("Nama yang ada di data ${data['nama']}");
 
-  // try
   // Try Catch
   try {
     // Code that may throw an error
@@ -73,4 +72,8 @@ void main(List<String> arguments) {
     // Code that runs always executes, regardless of whether an exception occurred or not
     print('Execution completed.');
   }
+
+  // null safety
+  String? kendaraan;
+  stdout.writeln("Kendaraan $kendaraan");
 }
