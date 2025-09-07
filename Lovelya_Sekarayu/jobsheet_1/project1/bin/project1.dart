@@ -53,16 +53,20 @@ void main(List<String> arguments) {
 
   //exception
   try {
-// Code that might throw an exception
-int result = 10 ~/ 0; // This will throw an IntegerDivisionByZeroException
-} on IntegerDivisionByZeroException {
-// Handles the specific IntegerDivisionByZeroException
-print("Cannot divide by zero!");
-} catch (e) {
-// Handles any other type of exception and provides the exception object
-print("An unexpected error occurred: $e");
-} finally {
-// Code that always executes, regardless of whether an exception occurred
-print("Execution complete.");
-}
+    // Code that might throw an exception
+    int result = 10 ~/ 0; // This will throw an IntegerDivisionByZeroException
+    } on IntegerDivisionByZeroException {
+    // Handles the specific IntegerDivisionByZeroException
+    print("Cannot divide by zero!");
+    } catch (e) {
+    // Handles any other type of exception and provides the exception object
+    print("An unexpected error occurred: $e");
+    } finally {
+    // Code that always executes, regardless of whether an exception occurred
+    print("Execution complete.");
+    }
+  
+  //Null safety
+  String? kendaraan;
+  stdout.writeln("Kendaraan $kendaraan");
 }
