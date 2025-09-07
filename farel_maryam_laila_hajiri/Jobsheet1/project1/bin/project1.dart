@@ -87,4 +87,15 @@ void main(List<String> arguments) {
   }
 
   stdout.writeln("Fungsi tambah: ${tambah(5, 3)}");
+  // -----------------------
+  // 11. VARIABLE SCOPE
+  // -----------------------
+  int globalVar = 100;
+  void innerFunction() {
+    int localVar = 50;
+    stdout.writeln("Global: $globalVar, Local: $localVar");
+  }
+
+  innerFunction();
+  //stdout.writeln(localVar); // ERROR: localVar tidak bisa diakses di luar fungsi
 }
