@@ -61,4 +61,8 @@ void main(List<String> arguments) {
   } finally {
     print('Eksekusi selesai');
   }
+
+  String? kendaraan;
+  stdout.writeln("kendaraan $kendaraan ");
 }
+
