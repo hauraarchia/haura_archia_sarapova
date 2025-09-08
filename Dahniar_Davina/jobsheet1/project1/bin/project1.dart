@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:project1/project1.dart' as project1;
 
 const String nama = "Dahniar";
@@ -54,4 +53,11 @@ void main(List<String> arguments) {
   data.addAll({"hobi": "Watching Movie"});
   stdout.writeln("Data Saya adalah $data");
   stdout.writeln("Nama yang ada di data ${data['nama']}");
+
+  //operations
+  int berat = 55;
+  int jumlah = umur + berat;
+  stdout.writeln("Jumlah $jumlah");
+
+  
 }
