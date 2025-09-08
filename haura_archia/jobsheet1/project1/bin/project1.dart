@@ -61,4 +61,8 @@ void main(List<String> arguments) {
 
   stdout.writeln("Data $data");
   stdout.writeln("Nama yang ada di data ${data['nama']}");
+
+  //null safety (menambahkan ? pada akhir tipe data)
+  String? kendaraan;
+  stdout.write("kendaraan $kendaraan");
 }
