@@ -34,4 +34,10 @@ void main(List<String> arguments) {
   dynamic bebas = true ;
   stdout.writeln("Nilai dari dynamic adalah $bebas");
 
+  // Numbers + operator
+  int a = 12;
+  double b = 3.1;
+  stdout.writeln("Penjumlahan: ${a + b}");
+  stdout.writeln("Pembagian: ${a ~/ 4}");
+
 }
