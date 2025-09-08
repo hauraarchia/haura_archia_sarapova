@@ -70,4 +70,33 @@ void main(List<String> arguments) {
 
   dynamic bebas = "16"; // bisa diisi dengan tipe data apapun
   stdout.writeln("Nilai dari dynamic adalah $bebas");
+
+  // 5. Operators
+  // Arithmetic
+  int a = 10, b = 5;
+  print('a + b = ${a + b}'); // Addition
+  print('a - b = ${a - b}'); // Subtraction
+  print('a * b = ${a * b}'); // Multiplication
+  print('a / b = ${a / b}'); // Divide
+  print('a ~/ b = ${a ~/ b}'); // Divide, return integer
+  print('a % b = ${a % b}'); // Modulo
+  a++; // Increment
+  print('a++ = $a');
+  b--; // Decrement
+  print('b-- = $b');
+
+  // Comparison
+  print('a == b: ${a == b}'); // Equals
+  print('a != b: ${a != b}'); // Not Equal
+  print('a > b: ${a > b}'); // Greater than
+  print('a < b: ${a < b}'); // Less than
+  print('a >= b: ${a >= b}'); // Greater or equals
+  print('a <= b: ${a <= b}'); // Less or equals
+
+  // Logic
+  bool x = true, y = false;
+  print('x || y: ${x || y}'); // OR
+  print('x && y: ${x && y}'); // AND
+  print('!x: ${!x}'); // NOT
+
 }
