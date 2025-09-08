@@ -34,4 +34,11 @@ void main(List<String> arguments) {
     'no_hp': '1234567890',
   };
   stdout.writeln('Informasi saya $informasi');
+
+  //Operator
+  if (umur <= 30) {
+    print("Sukses di usia muda!");
+  } else {
+    print("Sukses di usia matang!");
+  }
 }
