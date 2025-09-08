@@ -70,5 +70,7 @@ void main(List<String> arguments) {
     print("Program selesai");
   }
 
-  
+  //null safety
+  String? Kendaraan;
+  stdout.writeln("Kendaraan Saya $Kendaraan");
 }
