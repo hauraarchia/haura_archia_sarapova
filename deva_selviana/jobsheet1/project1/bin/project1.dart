@@ -51,4 +51,19 @@ void main(List<String> arguments) {
   data.addAll({"hobi": "Membaca"});
   stdout.writeln("Data : $data");
   stdout.writeln("Nama yg ada di data ${data['nama']}");
+  // Try Catch
+  try {
+    // Code that might throw exception
+    int result = 10 ~/ 0; // This will throw an IntegerDivisionByZeroException
+  } on IntegerDivisionByZeroException {
+    // Handles the specific exception IntegerDivisionByZeroException
+    print('Cannot divide by zero!');
+  } catch (e) {
+    // Handles any other type of exception and provides the exception object/message
+    print('An unexpected error occurred: $e');
+  } finally {
+    // Code that runs always executes, regardless of whether an exception occurred or not
+    print('Execution complete.');
+  }
+
 }
