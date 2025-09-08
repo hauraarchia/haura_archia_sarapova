@@ -17,4 +17,21 @@ void main(List<String> arguments) {
   var name = "Devita Dwi Lestari";
   stdout.writeln("Nama: $name");
 
+  // Constanta dan Final
+  final String panggilan = 'Dwi';
+  print("Perkenalkan, saya $nama $panggilan");
+
+  // Data typs
+  int umur = 20;
+  double berat = 52.5;
+  bool jenis_kelamin = true; //true = Perempuan, false = laki-laki
+  String alamat = 'Jalan Kemuning Tarik';
+  stdout.writeln
+    ("Jenis kelasmin saya ${jenis_kelamin ? 'perempuan ' : 'laki-laki'}");
+  stdout.writeln("Alamat saya $alamat");
+  num nilai =90.5; //bisa diisi int atau double
+  stdout.writeln("Nilai saya $nilai");
+  dynamic bebas = true ;
+  stdout.writeln("Nilai dari dynamic adalah $bebas");
+
 }
