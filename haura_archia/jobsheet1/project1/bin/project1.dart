@@ -34,4 +34,15 @@ void main(List<String> arguments) {
   //   stdout.writeln("Jenis Kelamin saya Perempuan");
   // }
   stdout.writeln("Alamat saya $alamat");
+
+  //number
+  num nilai = 90.5; //bisa diisi int atau double
+  stdout.writeln("Nilai saya $nilai");
+  dynamic bebas = "16";
+  stdout.writeln("Nilai dari dynamic adalah $bebas");
+  String angka1 = "15"; //dibaca satu lima
+  int angka2 = int.parse(angka1);
+  int angka3 = bebas;
+
+  
 }
