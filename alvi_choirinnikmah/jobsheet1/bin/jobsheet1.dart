@@ -99,4 +99,24 @@ void main(List<String> arguments) {
   print('x && y: ${x && y}'); // AND
   print('!x: ${!x}'); // NOT
 
+  // 6. Exceptions
+  // Akan muncul output Unhandled exception: IntegerDivisionByZeroException dikarenakan pembagian dengan nol tidak terdefinisi
+  // var num1 = 7;
+  // var num2 = 0;
+  // print(num1 ~/ num2);
+
+  // Jika menggunakan try - on, catch - finally, maka program tidak akan berhenti dan menampilkan pesan error yang sudah ditentukan
+  try {
+  // Code that might throw an exception
+  int result = 10 ~/ 0; // This will throw an IntegerDivisionByZeroException
+  } on IntegerDivisionByZeroException {
+  // Handles the specific IntegerDivisionByZeroException
+  print("Cannot divide by zero!");
+  } catch (e) {
+  // Handles any other type of exception and provides the exception object
+  print("An unexpected error occurred: $e");
+  } finally {
+  // Code that always executes, regardless of whether an exception occurred
+  print("Execution complete.");
+  }
 }
