@@ -58,6 +58,16 @@ void main(List<String> arguments) {
   stdout.writeln("Biodata saya: $biodata");
   stdout.writeln("Nama yang tersimpan: ${biodata['nama']}");
 
-
+  //Exceptions
+  try {
+    int hasil = 100 ~/ 0;
+    stdout.writeln(hasil);
+  } on IntegerDivisionByZeroException {
+    print('Oops, terjadi pembagian dengan nol!');
+  } catch (e) {
+    print('Ada error lain: $e');
+  } finally {
+    print('Program tetap lanjut ke bagian akhir');
+  }
 
 }
