@@ -119,4 +119,11 @@ void main(List<String> arguments) {
   // Code that always executes, regardless of whether an exception occurred
   print("Execution complete.");
   }
+
+  // 7. Null Safety 
+  // String jumlah; variabel yang bisa bernilai null harus diberi tanda tanya (?) setelah tipe data.Jika tidak, akan error 
+  String? jumlah;
+  print(jumlah);
+  String? kendaraan;
+  stdout.writeln("Kendaraan $kendaraan"); // jika kendaraan bernilai null, maka akan menampilkan Motor
 }
