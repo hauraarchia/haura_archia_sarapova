@@ -45,4 +45,19 @@ void main(List<String> arguments) {
   kegiatan.add('Bersepeda');
   stdout.writeln('Kegiatan favorit saya: $kegiatan');
 
+  // Map
+  Map<String, String> biodata = {
+    "nama": "Devita Dwi Lestari",
+    "asal": "Sidoarjo",
+    "status": "Mahasiswa",
+    "jenis kelamin": "Perempuan",
+  };
+  stdout.writeln("Data : $biodata");
+  biodata["hobi"] = "Memasak";
+  biodata.addAll({"teman": "Sam & David"});
+  stdout.writeln("Biodata saya: $biodata");
+  stdout.writeln("Nama yang tersimpan: ${biodata['nama']}");
+
+
+
 }
