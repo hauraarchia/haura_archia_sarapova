@@ -9,4 +9,10 @@ void main(List<String> arguments) {
   //Final
   final String nama2 = 'Febriyanti';
   print('Nama saya $nama $nama2');
+
+  //Tipe Data
+  int umur = 20;
+  double tinggi = 1.60;
+  print('Umur saya: $umur Tahun');
+  print('Tinggi saya: $tinggi Meter');
 }
