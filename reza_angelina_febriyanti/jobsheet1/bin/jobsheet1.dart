@@ -41,4 +41,15 @@ void main(List<String> arguments) {
   } else {
     print("Sukses di usia matang!");
   }
+
+  //Exception
+  try {
+    int result = umur ~/ 0;
+  } on IntegerDivisionByZeroException {
+    print("Tidak bisa dibagi dengan 0");
+  } catch (e) {
+    print("Error: $e");
+  } finally {
+    print("Program selesai");
+  }
 }
