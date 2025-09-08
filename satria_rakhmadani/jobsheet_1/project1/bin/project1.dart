@@ -57,7 +57,7 @@ void main(List<String> arguments) {
   stdout.writeln("Data: $data");
   stdout.writeln("Nama yang ada di data ${data['nama']}");
 
-  void main() {
+
   try {
       // Code that might throw an exception
       int result = 10 ~/ 0; // This will throw an IntegerDivisionByZeroException
@@ -72,6 +72,9 @@ void main(List<String> arguments) {
       // Code that always executes, regardless of whether an exception occurred
       print("Execution complete.");
     }
-  };
 
-}
+  String? kendaraan;
+  stdout.writeln("Kendaraan $kendaraan");
+  }
+
+  
