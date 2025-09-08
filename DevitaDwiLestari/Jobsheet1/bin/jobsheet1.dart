@@ -40,4 +40,9 @@ void main(List<String> arguments) {
   stdout.writeln("Penjumlahan: ${a + b}");
   stdout.writeln("Pembagian: ${a ~/ 4}");
 
+  //List
+  List<String> kegiatan = ['Memasak', 'Membaca', 'Menyanyi'];
+  kegiatan.add('Bersepeda');
+  stdout.writeln('Kegiatan favorit saya: $kegiatan');
+
 }
