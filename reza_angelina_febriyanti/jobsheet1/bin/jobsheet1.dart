@@ -52,4 +52,8 @@ void main(List<String> arguments) {
   } finally {
     print("Program selesai");
   }
+
+  //Null Safety
+  String ? noPajak;
+  print("Nomor Pajak: $noPajak");
 }
