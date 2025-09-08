@@ -40,9 +40,25 @@ void main(List<String> arguments) {
   stdout.writeln("Nilai saya $nilai");
   dynamic bebas = "16";
   stdout.writeln("Nilai dari dynamic adalah $bebas");
-  String angka1 = "15"; //dibaca satu lima
-  int angka2 = int.parse(angka1);
-  int angka3 = bebas;
+  // String angka1 = "15"; //dibaca satu lima
+  // int angka2 = int.parse(angka1);
+  // int angka3 = bebas;
 
-  
+  //List
+  List<String> hobby = ["tidur", "makan", "mancing"];
+  hobby.add("shopping");
+  stdout.writeln("Hobby saya adalah $hobby");
+
+  //Map
+  Map<String, String> data = {
+    //<String, String> bisa diganti <String, int>
+    "nama": "haura", //sebagai label
+    "alamat": "Malang",
+    "jenis_kelamin": "Perempuan",
+  };
+  data["pekerjaan"] = "Dosen";
+  data.addAll({"hobi": "membaca"});
+
+  stdout.writeln("Data $data");
+  stdout.writeln("Nama yang ada di data ${data['nama']}");
 }
