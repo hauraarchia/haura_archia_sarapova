@@ -28,4 +28,46 @@ void main(List<String> arguments) {
 
   final radius = 14;
     print('Circle Area radius $radius = ${jobsheet1.calculatesArea(radius)}');
+
+  // 4. Data Tyape
+  int umur = 20; 
+  double tinggi = 163;
+  num berat = 56; // bisa diisi bilangan bulat atau decimal
+  bool jenis_kelamin = false; // true = laki-laki, false = perempuan
+  String alamat = 'Jl. Kembang Turi No. 3A 20A';
+  stdout.writeln("Umur saya $umur tahun");
+  stdout.writeln("Tinggi saya $tinggi cm");
+  // stdout.writeln("Jenis kelamin saya ${jenis_kelamin ? 'Laki-laki' : 'Perempuan'}");
+  if (jenis_kelamin==true) {
+    stdout.writeln("Jenis kelamin saya Laki-laki");
+  } else {
+    stdout.writeln("Jenis kelamin saya Perempuan");
+  }
+  stdout.writeln("Nama saya $nama $nama2");
+  stdout.writeln("Umur saya $umur tahun");
+  stdout.writeln("Tinggi saya $tinggi cm");
+  stdout.writeln("Berat badan saya $berat kg");
+  stdout.writeln("Jenis kelamin $jenis_kelamin ? 'Laki-laki' : 'Perempuan'}");
+  stdout.writeln("Almat $alamat");
+
+  // Type data list digunakan untuk menyimpan beberapa data dalam satu variabel
+  List<String> hobby = ["Menonton", "Mendengarkan Music", "Ngoding"];
+  hobby.add("Tidur"); 
+  stdout.writeln("Hobby saya adalah $hobby");
+
+  // Type data map digunakan untuk menyimpan beberapa data dalam satu variabel dengan key dan value
+  Map<String, String> data = {
+    "nama": "Alvi",
+    "alamat": "Jl. Kembang Turi No. 3A 20A",
+    "jenis_kelamin": "Perempuan",
+    "umur": "20" // lebih baik string dulu terus baru dikonversi ke int
+  };
+  data["pekerjaan"] = "manager";
+  data.addAll({"hobby": "Menonton"});
+  stdout.writeln("Data : $data");
+  stdout.writeln("Nama saya ${data['nama']}");
+  stdout.writeln("${data['hobby']} adalah hobby saya");
+
+  dynamic bebas = "16"; // bisa diisi dengan tipe data apapun
+  stdout.writeln("Nilai dari dynamic adalah $bebas");
 }
