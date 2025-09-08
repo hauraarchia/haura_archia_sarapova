@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:jobsheet1/jobsheet1.dart' as jobsheet1;
 
 const String nama = 'Reza'; //Constanta
@@ -15,4 +17,8 @@ void main(List<String> arguments) {
   double tinggi = 1.60;
   print('Umur saya: $umur Tahun');
   print('Tinggi saya: $tinggi Meter');
+
+  dynamic gaji = 150000000;
+  int gajiku = gaji;
+  stdout.writeln('Gaji saya $gajiku');
 }
