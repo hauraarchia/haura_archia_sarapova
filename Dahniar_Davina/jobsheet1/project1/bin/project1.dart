@@ -20,12 +20,20 @@ void main(List<String> arguments) {
   String alamat = "Malang";
   stdout.writeln("Umur Saya $umur tahun");
   stdout.writeln("Tinggi Saya $tinggi");
-  stdout.writeln("Jenis Kelamin Saya ${jenis_kelamin ? 'Laki-laki' : 'Perempuan'}");
+  stdout.writeln(
+    "Jenis Kelamin Saya ${jenis_kelamin ? 'Laki-laki' : 'Perempuan'}",
+  );
   /*if (jenis_kelamin==false) {
     stdout.writeln("Jenis Kelamin Saya Laki-laki");
   } else {
     stdout.writeln("Jenis Kelamin Saya Perempuan");
   }*/
   stdout.writeln("Alamat Saya $alamat");
-
+  num nilai = 99; //bisa diisi int atau double
+  stdout.writeln("Nilai Saya $nilai");
+  dynamic bebas = "55"; //bisa diisi semua tipe data
+  stdout.writeln("Nilai dari dynamic adalah $bebas");
+  String angka1 = "9";
+  int angka2 = int.parse(angka1);
+  int angka3 = bebas;
 }
