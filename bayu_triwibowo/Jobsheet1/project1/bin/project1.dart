@@ -47,4 +47,18 @@ void main(List<String> arguments) {
     int angka2 = int.parse(angka1);
     int angka3 = bebas;
   */
+
+    // list
+  List <String> hobby =["Makan", "Ngopi", "Main ML", "Tidur"];
+  hobby.add("Nonton");
+  stdout.writeln("Hobby saya adalah $hobby");
+  Map <String, String> data = {
+    "nama" : "yabb",
+    "Alamat" : "Jombang",
+    "Jenis Kelamin" : "Laki-laki",
+  };
+  data["umur"] = "21";
+  data.addAll({"hobi" : "nonton"});
+  stdout.writeln("Data : $data");
+  stdout.writeln("Nama yang ada di data ${data['nama']}");
 }
