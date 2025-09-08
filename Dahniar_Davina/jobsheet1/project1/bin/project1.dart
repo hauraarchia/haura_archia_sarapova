@@ -59,5 +59,16 @@ void main(List<String> arguments) {
   int jumlah = umur + berat;
   stdout.writeln("Jumlah $jumlah");
 
+  //Exception
+  try {
+    int result = umur ~/ 0;
+  } on IntegerDivisionByZeroException {
+    print("Tidak bisa dibagi dengan 0");
+  } catch (e) {
+    print("Error: $e");
+  } finally {
+    print("Program selesai");
+  }
+
   
 }
