@@ -70,4 +70,12 @@ void main(List<String> arguments) {
     print('Program tetap lanjut ke bagian akhir');
   }
 
+  // Null Safety
+  String? kendaraan;
+  stdout.writeln("Saya punya kendaraan: $kendaraan");
+
+  String? akun;
+  stdout.writeln("Nama pengguna: ${akun ?? 'Tidak diketahui'}");
+
+
 }
