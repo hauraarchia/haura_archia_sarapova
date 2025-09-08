@@ -12,4 +12,9 @@ void main(List<String> arguments) {
     contoh komentar panjang
     lebih dari satu baris
   */
+
+  // Variabel
+  var name = "Devita Dwi Lestari";
+  stdout.writeln("Nama: $name");
+
 }
