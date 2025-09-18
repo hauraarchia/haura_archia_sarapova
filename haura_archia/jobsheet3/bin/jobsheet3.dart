@@ -88,16 +88,31 @@ void main(List<String> arguments) {
   // print("Biodata Mahasiswa dengan nama = ${biodata['nama']}");
 
   // Record
-  var Mahasiswa = ("Pak Luqman", 40, true);
-  print("Data Pak Luqman : $Mahasiswa");
-  print("Mahasiswa = ${Mahasiswa.$1}");
+  // var Mahasiswa = ("Pak Luqman", 40, true);
+  // print("Data Pak Luqman : $Mahasiswa");
+  // print("Mahasiswa = ${Mahasiswa.$1}");
 
-  var bio = (nama : "Haura", umur : 20, gender:true);
+  // var bio = (nama : "Haura", umur : 20, gender:true);
   // print("Biodata saya $bio");
   // print("nama saya ${bio.nama}");
 
   // tampil("Haura", 20, "Malang");
   // tampil("Luqman", 21);
 
+  // Anonymous Function
+  // var nilai = [90, 80, 70, 100];
+  // nilai.forEach((angka) {
+  //   print("Nilai = $angka");
+  // });
 
 }
+  // Function Parameter
+  void tampil(String nama, int umur, [String? alamat]) {
+    print("Nama : $nama");
+    print("Umur : $umur");
+    if (alamat != null) {
+      print("Alamat : $alamat");
+    } else {
+      print("Alamat : -");
+    }
+  }
