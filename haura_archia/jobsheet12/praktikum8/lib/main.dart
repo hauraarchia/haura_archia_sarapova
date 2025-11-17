@@ -1,122 +1,236 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(const MyApp());
+// =========================================================================
+// Konfigurasi API
+// =========================================================================
+
+class ApiConfig {
+  static const String baseUrl = 'https://m9vo3.wiremockapi.cloud/'; // Ganti sesuai WireMock kamu
+  static const String usersEndpoint = '/users';
+
+  static Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// =========================================================================
+// MAIN APP
+// =========================================================================
 
-  // This widget is the root of your application.
+void main() {
+  runApp(const WireMockApp());
+}
+
+class WireMockApp extends StatelessWidget {
+  const WireMockApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+      title: 'WireMock Cloud Demo',
+      theme: ThemeData(primarySwatch: Colors.indigo),
+      home: const UserPage(),
+    ); // MaterialApp
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+// =========================================================================
+// UI: UserPage
+// =========================================================================
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class UserPage extends StatefulWidget {
+  const UserPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _UserPageState createState() => _UserPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _UserPageState extends State<UserPage> {
+  // Controllers untuk input form
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  void _incrementCounter() {
+  // State Management
+  List<dynamic> users = [];
+  bool isLoading = false;
+  String? errorMessage;
+  String? postMessage; // Tambahkan ini untuk menampilkan hasil POST
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+  }
+
+  // /// GET users
+  Future<void> fetchUsers() async {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      isLoading = true;
+      errorMessage = null;
     });
+
+    final url = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.usersEndpoint}');
+
+    try {
+      final response = await http
+          .get(url, headers: ApiConfig.headers)
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        setState(() => users = data);
+      } else {
+        setState(() => errorMessage = 'Error ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() => errorMessage = 'Error: $e');
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  // /// POST new user
+  Future<void> addUser() async {
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+
+    if (name.isEmpty || email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Nama & Email tidak boleh kosong')),
+      );
+      return;
+    }
+
+    final url = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.usersEndpoint}');
+    final body = jsonEncode({'name': name, 'email': email});
+
+    try {
+      final response = await http
+          .post(url, headers: ApiConfig.headers, body: body)
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> result = jsonDecode(response.body);
+        
+        setState(() {
+          // Ambil pesan dari respons atau gunakan pesan default
+          postMessage = result['message'] ?? 'User berhasil ditambahkan!';
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(postMessage!)));
+        
+        // Bersihkan input dan muat ulang daftar
+        _nameController.clear();
+        _emailController.clear();
+        fetchUsers();
+      } else {
+        setState(() {
+          postMessage = 'Gagal menambah user (${response.statusCode})';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(postMessage!)));
+      }
+    } catch (e) {
+      setState(() => postMessage = 'Error: $e');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(postMessage!)));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      appBar: AppBar(title: const Text('WireMock Cloud - Users')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            // Input form
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Nama',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Tambah User'),
+              onPressed: addUser,
+            ),
+            const SizedBox(height: 20),
+
+            // Tampilan Pesan POST
+            if (postMessage != null) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.green[50],
+                  border: Border.all(color: Colors.green),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  postMessage!,
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+
+            const Divider(),
+            
+            const Text(
+              'Daftar User',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const Divider(),
+
+            // Data list
+            Expanded(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : errorMessage != null
+                      ? Center(child: Text(errorMessage!))
+                      : users.isEmpty
+                          ? const Center(child: Text('Belum ada data.'))
+                          : ListView.builder(
+                              itemCount: users.length,
+                              itemBuilder: (context, index) {
+                                final user = users[index];
+                                return ListTile(
+                                  leading: CircleAvatar(
+                                      child: Text('${user['id']}')),
+                                  title: Text(user['name']),
+                                  subtitle: Text(user['email']),
+                                );
+                              },
+                            ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        onPressed: fetchUsers,
+        child: const Icon(Icons.refresh),
+      ),
+    ); // Scaffold
   }
 }
