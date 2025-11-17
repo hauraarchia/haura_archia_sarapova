@@ -1,122 +1,331 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
-void main() {
-  runApp(const MyApp());
+// =========================================================================
+// SERVICE: FileService - util dasar untuk file handling
+// =========================================================================
+
+class FileService {
+  Future<Directory> get documentsDirectory async {
+    return await getApplicationDocumentsDirectory();
+  }
+
+  Future<File> writeFile(String fileName, String content) async {
+    final Directory dir = await documentsDirectory;
+    final File file = File(path.join(dir.path, fileName));
+    return file.writeAsString(content);
+  }
+
+  Future<String> readFile(String fileName) async {
+    try {
+      final Directory dir = await documentsDirectory;
+      final File file = File(path.join(dir.path, fileName));
+      return await file.readAsString();
+    } catch (e) {
+      return '';
+    }
+  }
+
+  Future<bool> fileExists(String fileName) async {
+    final Directory dir = await documentsDirectory;
+    final File file = File(path.join(dir.path, fileName));
+    return file.exists();
+  }
+
+  Future<void> deleteFile(String fileName) async {
+    final Directory dir = await documentsDirectory;
+    final File file = File(path.join(dir.path, fileName));
+    if (await file.exists()) {
+      await file.delete();
+    }
+  }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// =========================================================================
+// SERVICE: DirectoryService - util directory management
+// =========================================================================
 
-  // This widget is the root of your application.
+class DirectoryService {
+  final FileService _fileService = FileService();
+
+  Future<Directory> createDirectory(String dirName) async {
+    final Directory appDir = await _fileService.documentsDirectory;
+    final Directory newDir = Directory(path.join(appDir.path, dirName));
+    if (!await newDir.exists()) {
+      await newDir.create(recursive: true);
+    }
+    return newDir;
+  }
+
+  Future<List<FileSystemEntity>> listFiles(String dirName) async {
+    final Directory dir = await createDirectory(dirName);
+    return dir.list().toList();
+  }
+
+  Future<void> deleteDirectory(String dirName) async {
+    final Directory appDir = await _fileService.documentsDirectory;
+    final Directory dir = Directory(path.join(appDir.path, dirName));
+    if (await dir.exists()) {
+      await dir.delete(recursive: true);
+    }
+  }
+}
+
+// =========================================================================
+// SERVICE: NoteService - simpan setiap note di file JSON
+// =========================================================================
+
+class NoteService {
+  final DirectoryService _dirService = DirectoryService();
+  final String _notesDir = 'notes';
+
+  // Method untuk menghapus note berdasarkan path absolut file
+  Future<void> deleteNoteByPath(String filePath) async {
+    final File file = File(filePath);
+    if (await file.exists()) {
+      await file.delete();
+    }
+  }
+
+  Future<void> saveNote({
+    required String title,
+    required String content,
+  }) async {
+    final Directory notesDir = await _dirService.createDirectory(_notesDir);
+    final String fileName =
+        '${DateTime.now().millisecondsSinceEpoch}.json'; // unik ID
+    final File file = File(path.join(notesDir.path, fileName));
+
+    final Map<String, dynamic> noteData = {
+      'title': title,
+      'content': content,
+      'created_at': DateTime.now().toIso8601String(),
+    };
+
+    await file.writeAsString(jsonEncode(noteData));
+  }
+
+  Future<List<Map<String, dynamic>>> getAllNotes() async {
+    final Directory notesDir = await _dirService.createDirectory(_notesDir);
+    final List<FileSystemEntity> files = await notesDir.list().toList();
+
+    List<Map<String, dynamic>> notes = [];
+    for (var entity in files) {
+      if (entity is File && entity.path.endsWith('.json')) {
+        final File file = entity;
+        final String content = await file.readAsString();
+        Map<String, dynamic> jsonData =
+            jsonDecode(content) as Map<String, dynamic>;
+
+        // Tambahkan path file ke data agar bisa dihapus nanti
+        jsonData['file_path'] = entity.path;
+
+        notes.add(jsonData);
+      }
+    }
+
+    // Urutkan dari terbaru (descending)
+    notes.sort(
+      (a, b) =>
+          b['created_at'].toString().compareTo(a['created_at'].toString()),
+    );
+
+    return notes;
+  }
+}
+
+// =========================================================================
+// UI: Flutter Notes App
+// =========================================================================
+
+void main() {
+  runApp(const NotesApp());
+}
+
+class NotesApp extends StatelessWidget {
+  const NotesApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+      title: 'Flutter Notes (Local File)',
+      theme: ThemeData(primarySwatch: Colors.indigo),
+      home: const NotesPage(),
+    ); // MaterialApp
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+// --- Halaman Utama Daftar Catatan ---
+class NotesPage extends StatefulWidget {
+  const NotesPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _NotesPageState createState() => _NotesPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _NotesPageState extends State<NotesPage> {
+  final NoteService _noteService = NoteService();
+  List<Map<String, dynamic>> _notes = [];
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    _loadNotes();
+  }
+
+  Future<void> _loadNotes() async {
+    final notes = await _noteService.getAllNotes();
+    setState(() => _notes = notes);
+  }
+
+  Future<void> _addNote() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddNotePage()),
+    );
+    // Jika result == true, artinya catatan baru telah disimpan
+    if (result == true) {
+      _loadNotes();
+    }
+  }
+
+  Future<void> _deleteNote(String filePath) async {
+    await _noteService.deleteNoteByPath(filePath);
+    _loadNotes();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Catatan dihapus!')));
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      appBar: AppBar(title: const Text('My Notes')),
+      body: _notes.isEmpty
+          ? const Center(child: Text('Belum ada catatan.'))
+          : ListView.builder(
+              itemCount: _notes.length,
+              itemBuilder: (context, index) {
+                final note = _notes[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  child: ListTile(
+                    title: Text(note['title']),
+                    subtitle: Text(
+                      note['content'],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => _deleteNote(note['file_path']),
+                    ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NoteDetailPage(note: note),
+                      ),
+                    ), // ListTile
+                  ),
+                ); // Card
+              },
+            ), // ListView.builder
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addNote,
+        child: const Icon(Icons.add),
+      ), // FloatingActionButton
+    ); // Scaffold
+  }
+}
+
+// --- Halaman Tambah Catatan ---
+class AddNotePage extends StatefulWidget {
+  const AddNotePage({super.key});
+
+  @override
+  _AddNotePageState createState() => _AddNotePageState();
+}
+
+class _AddNotePageState extends State<AddNotePage> {
+  final NoteService _noteService = NoteService();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+
+  Future<void> _saveNote() async {
+    if (_titleController.text.isEmpty || _contentController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Isi semua field dulu!')));
+      return;
+    }
+
+    await _noteService.saveNote(
+      title: _titleController.text,
+      content: _contentController.text,
+    );
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Catatan disimpan!')));
+    // Kembali ke halaman sebelumnya dan kirim sinyal 'true' bahwa data telah disimpan
+    Navigator.pop(context, true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Catatan Baru')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(labelText: 'Judul'),
+            ), // TextField
+            const SizedBox(height: 10),
+            Expanded(
+              child: TextField(
+                controller: _contentController,
+                decoration: const InputDecoration(labelText: 'Isi Catatan'),
+                expands: true,
+                maxLines: null,
+                textAlignVertical: TextAlignVertical.top,
+              ), // TextField
+            ), // Expanded
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.save),
+              label: const Text('Simpan'),
+              onPressed: _saveNote,
+            ), // ElevatedButton.icon
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+      ), // Padding
+    ); // Scaffold
+  }
+}
+
+// --- Halaman Detail Catatan ---
+class NoteDetailPage extends StatelessWidget {
+  final Map<String, dynamic> note;
+
+  const NoteDetailPage({super.key, required this.note});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(note['title'] ?? 'Note')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(child: Text(note['content'] ?? '')),
+      ), // Padding
+    ); // Scaffold
   }
 }
