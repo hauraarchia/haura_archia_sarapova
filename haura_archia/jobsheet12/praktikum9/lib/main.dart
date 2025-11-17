@@ -1,122 +1,139 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const MyApp());
+  runApp(const PokeApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PokeApp extends StatelessWidget {
+  const PokeApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+      title: 'PokeAPI Demo',
+      theme: ThemeData(primarySwatch: Colors.red),
+      home: const PokemonPage(),
+    ); // MaterialApp
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class PokemonPage extends StatefulWidget {
+  const PokemonPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _PokemonPageState createState() => _PokemonPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _PokemonPageState extends State<PokemonPage> {
+  // State untuk menyimpan data
+  Map<String, dynamic>? pokemonData;
+  bool isLoading = false;
+  String? error;
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    super.initState();
+    // Otomatis ambil data saat pertama kali dimuat
+    fetchPokemon(); 
+  }
+
+  // --- Fungsi untuk Mengambil Data Pokemon ---
+  Future<void> fetchPokemon() async {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      isLoading = true;
+      error = null;
     });
+
+    try {
+      final response = await http
+          .get(Uri.parse('https://pokeapi.co/api/v2/pokemon/ditto'))
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          pokemonData = jsonDecode(response.body) as Map<String, dynamic>;
+        });
+      } else {
+        setState(() {
+          error = 'Gagal memuat data. Status: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        error = 'Terjadi kesalahan: $e';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+  // --- Widget Card Tampilan Pokemon ---
+  Widget _buildPokemonCard() {
+    if (isLoading) {
+      return const CircularProgressIndicator();
+    }
+
+    if (error != null) {
+      return Text(error!, style: const TextStyle(color: Colors.red));
+    }
+    
+    // Tampilkan pesan jika data kosong (setelah loading/error)
+    if (pokemonData == null) {
+      return const Text('Tekan tombol refresh untuk memuat data.');
+    }
+
+    // Ekstraksi data
+    final name = pokemonData!['name'] ?? '-';
+    final id = pokemonData!['id'] ?? '-';
+    // Data height dan weight biasanya dalam desimeter/hektogram, tapi di sini ditampilkan mentah
+    final height = pokemonData!['height'] ?? '-'; 
+    final weight = pokemonData!['weight'] ?? '-';
+    // Ambil URL sprite, fallback ke placeholder jika tidak ada
+    final sprite = pokemonData!['sprites']?['front_default'] ?? 'https://via.placeholder.com/150';
+
+    return Card(
+      margin: const EdgeInsets.all(20),
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
+            Image.network(sprite, width: 150, height: 150),
+            const SizedBox(height: 10),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              name.toString().toUpperCase(),
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.redAccent,
+              ),
             ),
+            const SizedBox(height: 8),
+            Text('ID: $id'),
+            Text('Height: $height'),
+            Text('Weight: $weight'),
           ],
         ),
       ),
+    ); // Card
+  }
+
+  // --- Build UI Halaman ---
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('PokeAPI - Ditto')),
+      body: Center(child: _buildPokemonCard()),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        onPressed: fetchPokemon,
+        tooltip: 'Refresh Data',
+        child: const Icon(Icons.refresh),
+      ), // FloatingActionButton
+    ); // Scaffold
   }
 }
